@@ -47,19 +47,19 @@ public class AlgorithmStepsThread implements Runnable {
     }
     
     public Vector<MemoryCell> getFinalMainMemory() {
-        return finalMainMemory;
+        return this.finalMainMemory;
     }
     
     public JDialog getJDialogNextStep() {
-        return jDialogNextStep;
+        return this.jDialogNextStep;
     }
 
     public int getInitialPosition() {
-        return initialPosition;
+        return this.initialPosition;
     }
 
     public int getInitialPositionBlocks() {
-        return initialPositionBlocks;
+        return this.initialPositionBlocks;
     }
 
     public void setJDialogNextStep(JDialog jDialogNextStep) {
@@ -329,7 +329,7 @@ public class AlgorithmStepsThread implements Runnable {
                         this.jDialogNextStep.setVisible(true);
 
                         // First row
-                        j = (initialPositionBlocks - 1);
+                        j = (this.initialPositionBlocks - 1);
                         block.setBounds(20+(j*35), orientationAxisY, 30, 30);
                         while (j <= 14) {
                             if (this.isJButtonOkClicked) {
@@ -383,7 +383,7 @@ public class AlgorithmStepsThread implements Runnable {
                     if(steps <= 30) {
                         this.jDialogNextStep.setVisible(true);
                         // Second row
-                        j = (initialPositionBlocks - 16);
+                        j = (this.initialPositionBlocks - 16);
                         block.setBounds(20+(j*35), (orientationAxisY + 60), 30, 30);
                         while (j <= (steps - 16)) {
                             if (this.isJButtonOkClicked) {
@@ -401,7 +401,7 @@ public class AlgorithmStepsThread implements Runnable {
                             this.jDialogNextStep.setVisible(true);
 
                             // Second row
-                            j = (initialPositionBlocks - 16);
+                            j = (this.initialPositionBlocks - 16);
                             block.setBounds(20+(j*35), (orientationAxisY + 60), 30, 30);
                             while (j <= 14) {
                                 if (this.isJButtonOkClicked) {
@@ -526,7 +526,7 @@ public class AlgorithmStepsThread implements Runnable {
                 //The initial position to paint the blocks is on the third row
                 if((this.initialPositionBlocks > 30) && (this.initialPositionBlocks <= 45) && (steps >= this.initialPositionBlocks)){
                     this.jDialogNextStep.setVisible(true);
-                    j = (initialPositionBlocks - 31);
+                    j = (this.initialPositionBlocks - 31);
                     block.setBounds(20+(j*35), (orientationAxisY + 120), 30, 30);
                     while (j <= (steps - 31)) {
                         if (this.isJButtonOkClicked) {
@@ -545,7 +545,7 @@ public class AlgorithmStepsThread implements Runnable {
                             this.jDialogNextStep.setVisible(true);
 
                             // Third Row
-                            j = (initialPositionBlocks - 31);
+                            j = (this.initialPositionBlocks - 31);
                             block.setBounds(20+(j*35), (orientationAxisY + 120), 30, 30);
                             while (j <= 14) {
                                 if (this.isJButtonOkClicked) {
@@ -614,7 +614,7 @@ public class AlgorithmStepsThread implements Runnable {
                                     this.jDialogNextStep.setVisible(true);
 
                                     // Third row
-                                    j = (initialPositionBlocks - 31);
+                                    j = (this.initialPositionBlocks - 31);
                                     block.setBounds(20+(j*35), (orientationAxisY + 120), 30, 30);
                                     while (j <= 14) {
                                         if (this.isJButtonOkClicked) {
