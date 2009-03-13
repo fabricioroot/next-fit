@@ -23,7 +23,7 @@ public class AlgorithmStepsThread implements Runnable {
 
     JButton jButtonAlgorithmSteps;
     Vector<MemoryCell> finalMainMemory;
-    MemoryGenerator memoryGenerator;
+    MemoryGenerator memoryGenerator = new MemoryGenerator();
     Vector<Process> processesQueue;
     JPanel jPanelAnimation;
     JLabel jLabelNextStep;
@@ -32,17 +32,15 @@ public class AlgorithmStepsThread implements Runnable {
     JDialog jDialogNextStep;
     JButton jButtonOkNextStep;
     JLabel jLabelAtDialogNextStep;
-    int initialPosition;
-    int initialPositionBlocks;
+    int initialPosition = 0;
+    int initialPositionBlocks = 0;
     
-    public AlgorithmStepsThread(MainScreen mainScreen, JButton jButtonAlgorithmSteps, Vector<MemoryCell> finalMainMemory, MemoryGenerator memoryGenerator, Vector<Process> processesQueue, JPanel jPanelAnimation, int initialPosition, int initialPositionBlocks) {
+    public AlgorithmStepsThread(MainScreen mainScreen, JButton jButtonAlgorithmSteps, Vector<MemoryCell> finalMainMemory, Vector<Process> processesQueue, JPanel jPanelAnimation, int initialPositionBlocks) {
         this.mainScreen = mainScreen ;
         this.jButtonAlgorithmSteps = jButtonAlgorithmSteps;
         this.finalMainMemory = finalMainMemory;
-        this.memoryGenerator = memoryGenerator;
         this.processesQueue = processesQueue;
         this.jPanelAnimation = jPanelAnimation;
-        this.initialPosition = initialPosition;
         this.initialPositionBlocks = initialPositionBlocks;
     }
     
@@ -50,23 +48,17 @@ public class AlgorithmStepsThread implements Runnable {
         return this.finalMainMemory;
     }
     
-    public JDialog getJDialogNextStep() {
-        return this.jDialogNextStep;
-    }
-
-    public int getInitialPosition() {
-        return this.initialPosition;
-    }
-
     public int getInitialPositionBlocks() {
         return this.initialPositionBlocks;
+    }
+
+    public JDialog getJDialogNextStep() {
+        return this.jDialogNextStep;
     }
 
     public void setJDialogNextStep(JDialog jDialogNextStep) {
         this.jDialogNextStep = jDialogNextStep;
     }
-    
-    
 
     public void run() {
         this.jDialogNextStep = new JDialog();
@@ -101,7 +93,7 @@ public class AlgorithmStepsThread implements Runnable {
         this.finalMainMemory = this.memoryGenerator.decreaseProcessLifeTime(this.finalMainMemory);
         this.mainScreen.paintMainMemory(this.finalMainMemory);
 
-        // Refreshes the value of 'initialPosition' after the application of the method 'decreaseProcessLifeTime' of the 'MemoryGenerator' class
+        // Refreshes the value of 'initialPosition' after running the method 'decreaseProcessLifeTime' of the 'MemoryGenerator' class
         int k = 0;
         int auxCounter = 0;
         while(auxCounter < this.initialPositionBlocks) {
@@ -127,11 +119,13 @@ public class AlgorithmStepsThread implements Runnable {
         Vector<Integer> algorithmResult = algorithm.toExecute_A(this.finalMainMemory, process, this.initialPosition);
         
         if(algorithmResult.get(0) != 0) {
-        
+
+            Vector<MemoryCell> newMemory = algorithm.toExecute_B(this.finalMainMemory, process, this.initialPosition);
+            
             int steps = 0; //This variable stores how many steps (blocks from the position = 0)) the process (represented like one block) has "to jump" to reach the next position available
             int orientationAxisY = 25;
 
-            //It finds the 'steps' and walk until it reaches the position to go in
+            //It finds the 'steps' and walks until it reaches the position to go in
             for(int i = 0; i <= algorithmResult.get(1); i++){
                 steps = steps + this.finalMainMemory.elementAt(i).getSize();
             }
@@ -146,7 +140,7 @@ public class AlgorithmStepsThread implements Runnable {
             this.jPanelAnimation.add(block);
             
             int j = 0;
-            // If the initial position to paint the blocks is 0 (zero) -> It's gonna be like the FIRST-FIT political
+            // If the initial position to paint the blocks is 0 (zero) -> It's gonna be like the FIRST-FIT algorithm
             if(this.initialPositionBlocks == 0) {
                 if(steps <= 15) {
                     this.jDialogNextStep.setVisible(true);
@@ -239,8 +233,8 @@ public class AlgorithmStepsThread implements Runnable {
                 if((this.initialPositionBlocks <= 15) && (steps >= this.initialPositionBlocks)){
                     if(steps <= 15) {
                         this.jDialogNextStep.setVisible(true);
-                        block.setBounds(20, orientationAxisY, 30, 30);
                         j = (this.initialPositionBlocks - 1);
+                        block.setBounds(20+(j*35), orientationAxisY, 30, 30);
                         while (j <= (steps - 1)) {
                             if (this.isJButtonOkClicked) {
                                 this.isJButtonOkClicked = false;
@@ -257,8 +251,8 @@ public class AlgorithmStepsThread implements Runnable {
                             this.jDialogNextStep.setVisible(true);
 
                             // First row
-                            block.setBounds(20, orientationAxisY, 30, 30);    
                             j = (this.initialPositionBlocks - 1);
+                            block.setBounds(20+(j*35), orientationAxisY, 30, 30);
                             while (j <= 14) {
                                 if (this.isJButtonOkClicked) {
                                     this.isJButtonOkClicked = false;
@@ -286,8 +280,8 @@ public class AlgorithmStepsThread implements Runnable {
                                 this.jDialogNextStep.setVisible(true);
 
                                 // First row
-                                block.setBounds(20, orientationAxisY, 30, 30);
                                 j = (this.initialPositionBlocks - 1);
+                                block.setBounds(20+(j*35), orientationAxisY, 30, 30);
                                 while (j <= 14) {
                                     if (this.isJButtonOkClicked) {
                                         this.isJButtonOkClicked = false;
@@ -427,7 +421,7 @@ public class AlgorithmStepsThread implements Runnable {
                         }
                     }
                 }
-                else {                
+                else {
                     if((this.initialPositionBlocks > 15) && (this.initialPositionBlocks <= 30) && (steps < this.initialPositionBlocks)){
                         if(steps <= 15) {
                             this.jDialogNextStep.setVisible(true);
@@ -665,19 +659,15 @@ public class AlgorithmStepsThread implements Runnable {
                     }
                 }
             }
-            
+
+            this.finalMainMemory = newMemory;
+            this.mainScreen.paintMainMemory(this.finalMainMemory);
+            this.jPanelAnimation.add(block);
             block.setText("j");
             block.setBackground(new java.awt.Color(255, 255, 102));
             block.setToolTipText("Posição de parada da última busca");
-            
-            this.finalMainMemory = algorithm.toExecute_B(this.finalMainMemory, process, this.initialPosition);
-            this.jPanelAnimation.removeAll();
-            this.jPanelAnimation.repaint();
-            this.mainScreen.paintMainMemory(this.finalMainMemory);
-            this.jPanelAnimation.add(block);
-            this.initialPosition = algorithmResult.get(1);
-            
-            //It finds the 'initialPositionBlocks' from the value returned by the corresponding method of the 'NextFitAlgorithm' class
+
+            //It finds the new 'initialPositionBlocks' from the value returned by the corresponding method of the 'NextFitAlgorithm' class
             this.initialPositionBlocks = 0;
             for(int i = 0; i <= algorithmResult.get(1); i++){
                 this.initialPositionBlocks = this.initialPositionBlocks + this.finalMainMemory.elementAt(i).getSize();
