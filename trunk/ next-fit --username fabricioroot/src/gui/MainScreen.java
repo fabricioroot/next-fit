@@ -50,6 +50,7 @@ public class MainScreen extends javax.swing.JApplet {
                     jPanelLegend.setVisible(false);
                     jPanelInsertion.setVisible(false);
                     jPanelProcessesQueue.setVisible(false);
+                    jButtonOkNextStep.setVisible(false);
                 }
             });
         } catch (Exception ex) {
@@ -88,6 +89,7 @@ public class MainScreen extends javax.swing.JApplet {
         jButtonStart = new javax.swing.JButton();
         jButtonAlgorithmSteps = new javax.swing.JButton();
         jButtonRestart = new javax.swing.JButton();
+        jButtonOkNextStep = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
 
@@ -128,7 +130,7 @@ public class MainScreen extends javax.swing.JApplet {
         );
         jPanelAlgorithmLayout.setVerticalGroup(
             jPanelAlgorithmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPaneAlgorithm, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+            .addComponent(jScrollPaneAlgorithm, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE)
         );
 
         jPanelAnimation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Memória Principal", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
@@ -260,7 +262,7 @@ public class MainScreen extends javax.swing.JApplet {
             jPanelProcessesQueueLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelProcessesQueueLayout.createSequentialGroup()
                 .addComponent(jLabelIncreaseOrientation)
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         jButtonIntroduction.setToolTipText("Clique aqui para ver o algoritmo e um resumo teórico da política tratada");
@@ -302,6 +304,11 @@ public class MainScreen extends javax.swing.JApplet {
             }
         });
 
+        jButtonOkNextStep.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jButtonOkNextStep.setText("Clique aqui para próximo passo");
+        jButtonOkNextStep.setToolTipText("Clique aqui para próximo passo");
+        jButtonOkNextStep.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -330,7 +337,9 @@ public class MainScreen extends javax.swing.JApplet {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonAlgorithmSteps)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonRestart)))
+                        .addComponent(jButtonRestart)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonOkNextStep)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -354,7 +363,8 @@ public class MainScreen extends javax.swing.JApplet {
                     .addComponent(jButtonIntroduction)
                     .addComponent(jButtonStart)
                     .addComponent(jButtonAlgorithmSteps)
-                    .addComponent(jButtonRestart))
+                    .addComponent(jButtonRestart)
+                    .addComponent(jButtonOkNextStep))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -561,7 +571,7 @@ public class MainScreen extends javax.swing.JApplet {
                         "                                2) Passe o cursor do mouse sobre os processos (Blocos Vermelhos) para visualizar seus tempos de vida restantes. ", "DICA", JOptionPane.INFORMATION_MESSAGE);
                 
                 if(this.st != null) {
-                    if(!this.st.getJDialogNextStep().isVisible()) {
+                    if(!this.st.getJButtonOkNextStep().isVisible()) {
                         this.jButtonAlgorithmSteps.setEnabled(true);
                     }    
                 }
@@ -578,15 +588,11 @@ public class MainScreen extends javax.swing.JApplet {
     }//GEN-LAST:event_jButtonInsertProcessActionPerformed
 
     private void jButtonAlgorithmStepsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlgorithmStepsActionPerformed
-        if (st == null) {
-            JOptionPane.showMessageDialog(null, "Será aberta uma janela com um botão \"OK\" para prosseguir os passos do algoritmo.\n" +
-                            "DICA: caso esta janela suma (saia da frente das outras janelas abertas), use as teclas \"ALT + TAB\" para colocá-la na frente novamente.", "ATENÇÃO", JOptionPane.WARNING_MESSAGE);
-        }
         if(st != null) {
             this.finalMainMemory = st.getFinalMainMemory();
             this.initialPositionBlocks = st.getInitialPositionBlocks();
         }
-        st = new AlgorithmStepsThread(this, this.jButtonAlgorithmSteps, this.finalMainMemory, this.processesQueue, this.jPanelAnimation, this.initialPositionBlocks);
+        st = new AlgorithmStepsThread(this, this.jButtonAlgorithmSteps, this.finalMainMemory, this.processesQueue, this.jPanelAnimation, this.initialPositionBlocks, this.jButtonOkNextStep);
         t = new Thread(st);
         t.start();
 }//GEN-LAST:event_jButtonAlgorithmStepsActionPerformed
@@ -609,8 +615,7 @@ public class MainScreen extends javax.swing.JApplet {
         this.processCounter = 0;
         this.initialPositionBlocks = 0;
         if(this.st != null) {
-            this.st.getJDialogNextStep().setVisible(false);
-            this.st.setJDialogNextStep(null);
+            this.st.getJButtonOkNextStep().setVisible(false);
             this.st = null;
         }
         if (this.t != null) {
@@ -962,6 +967,7 @@ public class MainScreen extends javax.swing.JApplet {
     private javax.swing.JButton jButtonAlgorithmSteps;
     private javax.swing.JButton jButtonInsertProcess;
     private javax.swing.JButton jButtonIntroduction;
+    private javax.swing.JButton jButtonOkNextStep;
     private javax.swing.JButton jButtonRestart;
     private javax.swing.JButton jButtonStart;
     private javax.swing.JLabel jLabelIncreaseOrientation;
